@@ -1,61 +1,28 @@
 function solution(number) {
-  const ONE = "I",
-    FIVE = "V",
-    TEN = "X",
-    FIFTY = "L",
-    ONE_H = "C",
-    FIVE_H = "D",
-    ONE_T = "M",
-    NINE = "IX",
-    NINETY = "XC",
-    NINE_H = "CM";
+  const romanMap = [
+    { value: 1000, symbol: "M" },
+    { value: 900, symbol: "CM" },
+    { value: 500, symbol: "D" },
+    { value: 400, symbol: "CD" },
+    { value: 100, symbol: "C" },
+    { value: 90, symbol: "XC" },
+    { value: 50, symbol: "L" },
+    { value: 40, symbol: "XL" },
+    { value: 10, symbol: "X" },
+    { value: 9, symbol: "IX" },
+    { value: 5, symbol: "V" },
+    { value: 4, symbol: "IV" },
+    { value: 1, symbol: "I" },
+  ];
 
-  let romanNumberArr = [];
+  let result = "";
 
-  let numberArr = number.toString().split("").reverse();
-
-  const addUnits = (num, index) => {
-    while (num > 0) {
-      romanNumberArr.push(
-        index === 0 ? ONE : index === 1 ? TEN : index === 2 ? ONE_H : ONE_T
-      );
-
-      num--;
+  for (let { value, symbol } of romanMap) {
+    while (number >= value) {
+      result += symbol;
+      number -= value;
     }
-  };
+  }
 
-  const addFive = (index) => {
-    romanNumberArr.push(
-      index === 0 ? FIVE : index === 1 ? FIFTY : index === 2 ? FIVE_H : ""
-    );
-  };
-
-  numberArr.forEach((item, index) => {
-    let num = Number(item);
-
-    if (num === 5) {
-      addFive(index);
-    } else if (num < 5) {
-      if (num === 5 - 1) {
-        addFive(index);
-        addUnits(1, index);
-      } else {
-        addUnits(num, index);
-      }
-    } else {
-      if (num === 10 - 1) {
-        romanNumberArr.push(
-          index === 0 ? NINE : index === 1 ? NINETY : index === 2 ? NINE_H : ""
-        );
-      } else {
-        if (num > 5) {
-          addUnits(num - 5, index);
-
-          addFive(index);
-        }
-      }
-    }
-  });
-
-  return romanNumberArr.reverse().join("");
+  return result;
 }
